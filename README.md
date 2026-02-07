@@ -1627,7 +1627,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Getting Help
 
-- **Documentation**: https://docs.arguxai.dev
+
 - **GitHub Issues**: [Report bugs](https://github.com/techiepookie/arguxai/issues)
 - **Discussions**: [Ask questions](https://github.com/techiepookie/arguxai/discussions)
 - **Email**: nikhilkumar1241@outlook.com
