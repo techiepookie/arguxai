@@ -2,8 +2,8 @@
  * API Service - Centralized API calls to ArguxAI backend
  */
 
-const API_BASE = 'http://localhost:8000';
-const API_KEY = 'Bearer demo'; // Replace with actual auth
+const API_BASE = window.location.origin;
+const API_KEY = 'bzWA50E8DivDDMS5bzfgm9uqxpyzOS6U6yWHWhakIgY'; // Your actual API key
 
 class APIService {
     constructor() {
@@ -15,7 +15,7 @@ class APIService {
         const url = `${this.baseURL}${endpoint}`;
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': this.apiKey,
+            'Authorization': `Bearer ${this.apiKey}`,
             ...options.headers
         };
 

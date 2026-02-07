@@ -11,9 +11,9 @@ ENV/
 dist/
 build/
 
-# Database
-*.db
+# Database (but allow arguxai.db for Docker image)
 *.db-journal
+!arguxai.db
 
 # IDE
 .vscode/
