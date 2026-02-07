@@ -39,7 +39,7 @@ router.register('/dashboard', async function () {
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">Conversion Funnel</h2>
-                    <a href="#" class="view-all">View Details</a>
+                    <a href="#/funnels" class="view-all">View Details</a>
                 </div>
                 <div class="funnel-container" id="dashboard-funnel">
                     <!-- Funnel steps will be rendered here -->
@@ -100,7 +100,7 @@ function renderAlertBanner(alert, container) {
                     <p>${escapeHTML(alert.subtext || '')}</p>
                 </div>
             </div>
-            <button class="btn btn-primary">View Details</button>
+            <button class="btn btn-primary" onclick="window.location.hash='#/issues'">View Details</button>
         </div>
     `;
 }

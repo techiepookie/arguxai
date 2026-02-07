@@ -85,11 +85,11 @@ async def get_dashboard_metrics(
         # 5. Funnel Steps (Real data for login funnel)
         funnel_steps = []
         steps = ["Page View", "Sign Up Click", "Form Started", "Login Complete"]
-        event_types = ["login_page_view", "login_button_click", "form_start", "login_complete"]
+        funnel_step_names = ["page_view", "sign_up_click", "form_started", "login_complete"]
         
         base_count = 1
-        for i, (name, event) in enumerate(zip(steps, event_types)):
-            cursor.execute("SELECT COUNT(DISTINCT session_id) FROM events WHERE event_type = ?", (event,))
+        for i, (name, step_name) in enumerate(zip(steps, funnel_step_names)):
+            cursor.execute("SELECT COUNT(DISTINCT session_id) FROM events WHERE funnel_step = ?", (step_name,))
             count = cursor.fetchone()[0]
             if i == 0:
                 base_count = count or 1
@@ -102,7 +102,7 @@ async def get_dashboard_metrics(
         recent_issues = []
         for row in issue_rows:
             recent_issues.append(RecentIssue(
-                id=row['id'],
+                id=row['issue_id'],  # Use issue_id instead of id
                 funnel_step=row['funnel_step'],
                 severity=row['severity'],
                 drop_percentage=row['drop_percentage'],
