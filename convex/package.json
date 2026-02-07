@@ -1,0 +1,16 @@
+{
+    "name": "arguxai-convex",
+    "version": "1.0.0",
+    "description": "ArguxAI Convex Backend",
+    "scripts": {
+        "dev": "convex dev",
+        "deploy": "convex deploy"
+    },
+    "dependencies": {
+        "convex": "^1.17.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "typescript": "^5.0.0"
+    }
+}

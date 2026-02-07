@@ -1,0 +1,9 @@
+{
+    "issue_id": "issue_demo_otp",
+    "repository": "your-org/your-demo-repo",
+    "target_files": [
+        "services/otp_service.py",
+        "config/twilio.py"
+    ],
+    "base_branch": "main"
+}

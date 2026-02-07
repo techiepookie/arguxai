@@ -1,0 +1,44 @@
+{
+  "events": [
+    {
+      "event_type": "page_view",
+      "session_id": "sess_test_001",
+      "timestamp": 1707289167000,
+      "funnel_step": "signup_form",
+      "device_type": "mobile",
+      "country": "US",
+      "app_version": "2.0.0",
+      "properties": {
+        "page_url": "/signup",
+        "referrer": "google"
+      }
+    },
+    {
+      "event_type": "button_click",
+      "session_id": "sess_test_001",
+      "timestamp": 1707289168000,
+      "funnel_step": "signup_form",
+      "device_type": "mobile",
+      "country": "US",
+      "app_version": "2.0.0",
+      "properties": {
+        "button_id": "signup_submit",
+        "button_text": "Sign Up"
+      }
+    },
+    {
+      "event_type": "otp_sent",
+      "session_id": "sess_test_001",
+      "user_id": "user_12345",
+      "timestamp": 1707289169000,
+      "funnel_step": "otp_verification",
+      "device_type": "mobile",
+      "country": "IN",
+      "app_version": "2.0.0",
+      "properties": {
+        "phone_number": "+91XXXXXXXXXX",
+        "provider": "twilio"
+      }
+    }
+  ]
+}

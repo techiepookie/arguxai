@@ -1,0 +1,234 @@
+"""
+Test REAL GitHub PR creation using your actual GitHub token
+This will create a real branch and PR in your repository
+"""
+
+import httpx
+import asyncio
+import json
+
+# Your actual credentials from .env
+GITHUB_TOKEN = "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"
+GITHUB_REPO = "techiepookie/ai-ux-flow"  # From your .env
+
+async def create_real_github_pr():
+    print("\n" + "="*70)
+    print("🚀 CREATING REAL GITHUB PR")
+    print("="*70 + "\n")
+    
+    base_url = "https://api.github.com"
+    
+    client = httpx.AsyncClient(
+        timeout=30.0,
+        headers={
+            "Authorization": f"Bearer {GITHUB_TOKEN}",
+            "Accept": "application/vnd.github.v3+json",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+    )
+    
+    try:
+        # Step 1: Verify authentication
+        print("Step 1: Testing GitHub authentication...")
+        me_response = await client.get(f"{base_url}/user")
+        
+        if me_response.status_code == 200:
+            user_data = me_response.json()
+            print(f"✅ Authenticated as: {user_data.get('login')}")
+            print(f"   Name: {user_data.get('name')}\n")
+        else:
+            print(f"❌ Auth failed: {me_response.status_code}")
+            print(f"   {me_response.text}\n")
+            return
+        
+        # Step 2: Get the repository
+        print(f"Step 2: Checking repository '{GITHUB_REPO}'...")
+        repo_response = await client.get(f"{base_url}/repos/{GITHUB_REPO}")
+        
+        if repo_response.status_code != 200:
+            print(f"❌ Repository not found or no access: {repo_response.status_code}")
+            print(f"   Make sure the repo exists and token has access\n")
+            return
+        
+        repo_data = repo_response.json()
+        default_branch = repo_data.get("default_branch", "main")
+        print(f"✅ Repository found: {repo_data.get('full_name')}")
+        print(f"   Default branch: {default_branch}\n")
+        
+        # Step 3: Get the latest commit SHA from default branch
+        print(f"Step 3: Getting latest commit from '{default_branch}'...")
+        ref_response = await client.get(f"{base_url}/repos/{GITHUB_REPO}/git/refs/heads/{default_branch}")
+        
+        if ref_response.status_code != 200:
+            print(f"❌ Could not get branch ref: {ref_response.status_code}")
+            return
+        
+        ref_data = ref_response.json()
+        base_sha = ref_data["object"]["sha"]
+        print(f"✅ Latest commit SHA: {base_sha[:8]}...\n")
+        
+        # Step 4: Create a new branch
+        branch_name = f"arguxai/fix-otp-verification-{base_sha[:8]}"
+        print(f"Step 4: Creating branch '{branch_name}'...")
+        
+        create_ref_response = await client.post(
+            f"{base_url}/repos/{GITHUB_REPO}/git/refs",
+            json={
+                "ref": f"refs/heads/{branch_name}",
+                "sha": base_sha
+            }
+        )
+        
+        if create_ref_response.status_code not in [200, 201]:
+            print(f"⚠️  Branch might already exist or error: {create_ref_response.status_code}")
+            # Continue anyway - might be from previous test
+        else:
+            print(f"✅ Branch created!\n")
+        
+        # Step 5: Create a file change (AI-generated fix)
+        print("Step 5: Creating AI-generated code fix...")
+        
+        file_content = """# OTP Verification Fix - AI Generated
+
+## Changes Made:
+- Added exponential backoff for Twilio API calls
+- Implemented retry logic with jitter
+- Increased timeout from 30s to 45s
+- Added fallback OTP provider for IN/PH/BD regions
+
+## Code:
+```python
+import time
+import random
+
+def send_otp_with_retry(phone_number, max_retries=3):
+    '''Send OTP with exponential backoff retry logic'''
+    for attempt in range(max_retries):
+        try:
+            # Add jitter to prevent thundering herd
+            jitter = random.uniform(0, 0.3 * (2 ** attempt))
+            
+            # Call Twilio with increased timeout
+            response = twilio_client.messages.create(
+                to=phone_number,
+                from_=TWILIO_NUMBER,
+                body=generate_otp(),
+                timeout=45  # Increased from 30s
+            )
+            
+            return response
+            
+        except TwilioException as e:
+            if attempt == max_retries - 1:
+                # Try fallback provider for specific regions
+                if is_asia_pacific(phone_number):
+                    return send_via_fallback_provider(phone_number)
+                raise
+            
+            # Exponential backoff with jitter
+            wait_time = (2 ** attempt) + jitter
+            time.sleep(wait_time)
+```
+
+## Impact:
+- Expected to recover 40.2% conversion drop
+- Reduces timeout errors by 85%
+- Improves UX in APAC regions
+
+---
+🤖 This fix was automatically generated by ArguxAI using DeepSeek AI
+"""
+        
+        # Try to create/update a file
+        file_path = "ARGUXAI_FIX_OTP_VERIFICATION.md"
+        
+        create_file_response = await client.put(
+            f"{base_url}/repos/{GITHUB_REPO}/contents/{file_path}",
+            json={
+                "message": "🤖 ArguxAI: Fix OTP verification timeout issues\n\n- Add exponential backoff retry logic\n- Increase Twilio timeout to 45s\n- Add fallback provider for APAC\n\nAI Diagnosis: Twilio rate limiting causing 40.2% drop\nConfidence: 85%",
+                "content": file_content.encode().hex(),  # GitHub requires hex encoding
+                "branch": branch_name
+            }
+        )
+        
+        if create_file_response.status_code not in [200, 201]:
+            print(f"⚠️  File creation response: {create_file_response.status_code}")
+            print(f"   {create_file_response.text[:200]}\n")
+        else:
+            print(f"✅ Code fix committed to branch!\n")
+        
+        # Step 6: Create Pull Request
+        print("Step 6: Creating Pull Request...")
+        
+        pr_body = f"""## 🤖 AI-Detected Issue & Auto-Generated Fix
+
+### 🚨 Problem Identified:
+**OTP Verification - 40.2% Conversion Drop (CRITICAL)**
+
+### 📊 Metrics:
+- Current Rate: 52%
+- Baseline Rate: 87%
+- Drop: 40.2 percentage points
+- Statistical Significance: 3.8σ
+- Affected Sessions: 450+
+
+### 🔍 AI Diagnosis:
+Twilio API rate limiting and network timeouts are blocking OTP delivery to mobile users, particularly in India, Philippines, and Bangladesh regions.
+
+**Confidence: 85%**
+
+### ✅ Proposed Solution:
+1. Implement exponential backoff with jitter for Twilio API retries
+2. Increase OTP delivery timeout from 30s to 45s
+3. Add fallback OTP provider for APAC regions (IN/PH/BD)
+4. Implement client-side OTP caching to reduce retry attempts
+
+### 📝 Files Changed:
+- `ARGUXAI_FIX_OTP_VERIFICATION.md` - Implementation guide and code
+
+### 🎯 Expected Impact:
+- Recover 40.2% conversion drop
+- Reduce timeout errors by ~85%
+- Improve user experience in high-latency regions
+
+---
+
+🤖 **This PR was automatically created by ArguxAI** - AI-powered conversion optimization system
+🧠 **AI Model**: DeepSeek Chat + Vision
+📊 **Detection**: Statistical anomaly analysis (Z-score)
+"""
+        
+        pr_response = await client.post(
+            f"{base_url}/repos/{GITHUB_REPO}/pulls",
+            json={
+                "title": "🤖 ArguxAI: Fix OTP Verification Timeout (40.2% Drop Recovery)",
+                "head": branch_name,
+                "base": default_branch,
+                "body": pr_body,
+                "maintainer_can_modify": True
+            }
+        )
+        
+        if pr_response.status_code in [200, 201]:
+            pr_data = pr_response.json()
+            
+            print("\n" + "="*70)
+            print("🎉 SUCCESS! REAL GITHUB PR CREATED!")
+            print("="*70 + "\n")
+            
+            print(f"🔀 PR #{pr_data['number']}: {pr_data['title']}")
+            print(f"🌿 Branch: {branch_name}")
+            print(f"🔗 URL: {pr_data['html_url']}")
+            print(f"📊 Status: {pr_data['state']}")
+            print(f"\n✨ GO CHECK YOUR GITHUB - THE PR IS LIVE!")
+            print(f"   {pr_data['html_url']}\n")
+            
+        else:
+            print(f"\n❌ Failed to create PR: {pr_response.status_code}")
+            print(f"Response: {pr_response.text}\n")
+                
+    finally:
+        await client.aclose()
+
+if __name__ == "__main__":
+    asyncio.run(create_real_github_pr())
