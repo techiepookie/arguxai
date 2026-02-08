@@ -29,7 +29,7 @@ Your OTP verification funnel drops from 48% to 27% overnight. ArguxAI:
 4. **Proves** the fix recovered $8.4K/day
 
 ---
-<video controls src="https://pub-84744dd4dd0b498f983c9f340a4e71f7.r2.dev/arguxai/arguxai.mp4"></video>
+[![ArguxAI Demo](https://pub-84744dd4dd0b498f983c9f340a4e71f7.r2.dev/arguxai/thumbnail.png)](https://pub-84744dd4dd0b498f983c9f340a4e71f7.r2.dev/arguxai/arguxai.mp4)
 
 
 ## ⭐ Key Features
