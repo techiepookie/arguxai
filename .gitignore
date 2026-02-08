@@ -56,3 +56,4 @@ logs/
 demo/generated_events/
 generate_docker_data.py
 generate_data_with_anomaly.py
+tests
