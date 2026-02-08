@@ -18,6 +18,8 @@ ArguxAI combines **statistical anomaly detection**, **AI-powered root cause anal
 - **🎟️ Ticket Creation**: Auto-creates Jira tickets with full context
 - **📈 ROI Dashboards**: Track revenue recovered and funnel improvements
 
+<video controls src="https://pub-84744dd4dd0b498f983c9f340a4e71f7.r2.dev/arguxai/arguxai.mp4"></video>
+
 ### Real-World Use Case
 
 Your OTP verification funnel drops from 48% to 27% overnight. ArguxAI:
