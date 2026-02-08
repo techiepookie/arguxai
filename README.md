@@ -1639,7 +1639,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Reporting Security Issues
 
 Please report security vulnerabilities responsibly:
-- Email: security@arguxai.dev
+- Email: nikhilkumar1241@outlook.com
 - Do not open public GitHub issues for security problems
 - We'll respond within 48 hours
 
